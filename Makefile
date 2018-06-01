@@ -50,13 +50,15 @@ NODE_PREBUILT_TAG	= zone
 # sdc-minimal-multiarch-lts 15.4.1
 NODE_PREBUILT_IMAGE	= 18b094b0-eb01-11e5-80c1-175dac7ddf02
 
-include ./tools/mk/Makefile.defs
+REQUIRE_ENG := $(shell git submodule update --init eng)
+include ./eng/tools/mk/Makefile.defs
+TOP ?= $(error Unable to access eng.git submodule Makefiles.)
+
 ifeq ($(shell uname -s),SunOS)
-	include ./tools/mk/Makefile.node_prebuilt.defs
+	include ./eng/tools/mk/Makefile.node_prebuilt.defs
 else
-	include ./tools/mk/Makefile.node.defs
+	include ./eng/tools/mk/Makefile.node.defs
 endif
-include ./tools/mk/Makefile.node_deps.defs
 include ./tools/mk/Makefile.nginx.defs
 
 #
@@ -147,12 +149,11 @@ publish: release
 	mkdir -p $(BITS_DIR)/mako
 	cp $(ROOT)/$(RELEASE_TARBALL) $(BITS_DIR)/mako/$(RELEASE_TARBALL)
 
-include ./tools/mk/Makefile.deps
+include ./eng/tools/mk/Makefile.deps
 ifeq ($(shell uname -s),SunOS)
-	include ./tools/mk/Makefile.node_prebuilt.targ
+	include ./eng/tools/mk/Makefile.node_prebuilt.targ
 else
-	include ./tools/mk/Makefile.node.targ
+	include ./eng/tools/mk/Makefile.node.targ
 endif
-include ./tools/mk/Makefile.node_deps.targ
 include ./tools/mk/Makefile.nginx.targ
-include ./tools/mk/Makefile.targ
+include ./eng/tools/mk/Makefile.targ
