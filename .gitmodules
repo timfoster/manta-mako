@@ -15,4 +15,4 @@
 	url = https://github.com/davepacheco/jsstyle.git
 [submodule "eng"]
 	path = eng
-	url = https://github.com/joyent/eng.git
+	url = /Users/timf/projects/submodule/eng.git
