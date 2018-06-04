@@ -50,6 +50,14 @@ NODE_PREBUILT_TAG	= zone
 # sdc-minimal-multiarch-lts 15.4.1
 NODE_PREBUILT_IMAGE	= 18b094b0-eb01-11e5-80c1-175dac7ddf02
 
+#
+# Stuff used for buildimage
+#
+BASE_IMAGE_UUID		= 04a48d7d-6bb5-4e83-8c3b-e60a99e0f48f
+BUILDIMAGE_NAME		= manta-storage
+BUILDIMAGE_PKGS		= pcre-8.38
+BUILDIMAGE_MF		= '{"name": "$(BUILDIMAGE_NAME)", "version": "$(STAMP)"}'
+
 REQUIRE_ENG := $(shell git submodule update --init eng)
 include ./eng/tools/mk/Makefile.defs
 TOP ?= $(error Unable to access eng.git submodule Makefiles.)
