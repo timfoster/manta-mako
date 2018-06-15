@@ -64,6 +64,7 @@ TOP ?= $(error Unable to access eng.git submodule Makefiles.)
 
 ifeq ($(shell uname -s),SunOS)
 	include ./eng/tools/mk/Makefile.node_prebuilt.defs
+	include ./eng/tools/mk/Makefile.agent_prebuilt.defs
 else
 	include ./eng/tools/mk/Makefile.node.defs
 endif
@@ -76,6 +77,10 @@ ROOT            := $(shell pwd)
 RELEASE_TARBALL := mako-pkg-$(STAMP).tar.bz2
 RELSTAGEDIR          := /tmp/$(STAMP)
 
+
+AGENTS = amon config minnow registrar
+AGENT_DEPS = $(AGENTS:=-prebuilt)
+
 #
 # v8plus uses the CTF tools as part of its build, but they can safely be
 # overridden here so that this works in dev zones without them.
@@ -87,7 +92,7 @@ NPM_ENV          = MAKE_OVERRIDES="CTFCONVERT=/bin/true CTFMERGE=/bin/true"
 # Repo-specific targets
 #
 .PHONY: all
-all: $(NODE_EXEC) $(NGINX_EXEC) $(TAPE) $(REPO_DEPS) scripts
+all: $(NODE_EXEC) $(NGINX_EXEC) $(TAPE) $(REPO_DEPS) scripts agents
 	$(NPM) install
 $(TAPE): | $(NPM_EXEC)
 	$(NPM) install
@@ -112,6 +117,9 @@ scripts: deps/manta-scripts/.git
 check-nginx: $(NGINX_EXEC)
 	$(NGXSYMCHECK) $(NGINX_EXEC)
 prepush: check-nginx
+
+.PHONY: agents
+agents: $(AGENT_DEPS)
 
 #
 # The eng.git makefiles define the clean target using a :: rule. This
@@ -163,6 +171,7 @@ publish: release
 include ./eng/tools/mk/Makefile.deps
 ifeq ($(shell uname -s),SunOS)
 	include ./eng/tools/mk/Makefile.node_prebuilt.targ
+	include ./eng/tools/mk/Makefile.agent_prebuilt.targ
 else
 	include ./eng/tools/mk/Makefile.node.targ
 endif
