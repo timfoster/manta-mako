@@ -59,14 +59,14 @@ BUILDIMAGE_PKGS		= pcre-8.38
 BUILDIMAGE_MF		= '{"name": "$(BUILDIMAGE_NAME)", "version": "$(STAMP)"}'
 
 REQUIRE_ENG := $(shell git submodule update --init eng)
-include ./eng/tools/mk/Makefile.defs
+include ./deps/eng/tools/mk/Makefile.defs
 TOP ?= $(error Unable to access eng.git submodule Makefiles.)
 
 ifeq ($(shell uname -s),SunOS)
-	include ./eng/tools/mk/Makefile.node_prebuilt.defs
-	include ./eng/tools/mk/Makefile.agent_prebuilt.defs
+	include ./deps/eng/tools/mk/Makefile.node_prebuilt.defs
+	include ./deps/eng/tools/mk/Makefile.agent_prebuilt.defs
 else
-	include ./eng/tools/mk/Makefile.node.defs
+	include ./deps/eng/tools/mk/Makefile.node.defs
 endif
 include ./tools/mk/Makefile.nginx.defs
 
@@ -168,12 +168,12 @@ publish: release
 	mkdir -p $(BITS_DIR)/mako
 	cp $(ROOT)/$(RELEASE_TARBALL) $(BITS_DIR)/mako/$(RELEASE_TARBALL)
 
-include ./eng/tools/mk/Makefile.deps
+include ./deps/eng/tools/mk/Makefile.deps
 ifeq ($(shell uname -s),SunOS)
-	include ./eng/tools/mk/Makefile.node_prebuilt.targ
-	include ./eng/tools/mk/Makefile.agent_prebuilt.targ
+	include ./deps/eng/tools/mk/Makefile.node_prebuilt.targ
+	include ./deps/eng/tools/mk/Makefile.agent_prebuilt.targ
 else
-	include ./eng/tools/mk/Makefile.node.targ
+	include ./deps/eng/tools/mk/Makefile.node.targ
 endif
 include ./tools/mk/Makefile.nginx.targ
-include ./eng/tools/mk/Makefile.targ
+include ./deps/eng/tools/mk/Makefile.targ

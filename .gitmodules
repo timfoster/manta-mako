@@ -14,5 +14,5 @@
 	path = deps/jsstyle
 	url = https://github.com/davepacheco/jsstyle.git
 [submodule "eng"]
-	path = eng
+	path = deps/eng
 	url = /Users/timf/projects/submodule/eng.git
