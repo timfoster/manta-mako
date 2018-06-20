@@ -58,7 +58,7 @@ BUILDIMAGE_NAME		= manta-storage
 BUILDIMAGE_PKGS		= pcre-8.38
 BUILDIMAGE_MF		= '{"name": "$(BUILDIMAGE_NAME)", "version": "$(STAMP)"}'
 
-REQUIRE_ENG := $(shell git submodule update --init eng)
+REQUIRE_ENG := $(shell git submodule update --init deps/eng)
 include ./deps/eng/tools/mk/Makefile.defs
 TOP ?= $(error Unable to access eng.git submodule Makefiles.)
 
