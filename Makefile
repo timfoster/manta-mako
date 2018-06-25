@@ -132,8 +132,8 @@ agents: $(AGENT_DEPS)
 clean::
 	-(cd deps/nginx && $(MAKE) clean)
 
-.PHONY: release_stagedir
-release_stagedir: all deps docs $(SMF_MANIFESTS) check-nginx
+.PHONY: release
+release: all deps docs $(SMF_MANIFESTS) check-nginx
 	@echo "Building $(RELEASE_TARBALL)"
 	@mkdir -p $(RELSTAGEDIR)/root/opt/smartdc/mako
 	@mkdir -p $(RELSTAGEDIR)/root/opt/smartdc/boot
@@ -154,10 +154,6 @@ release_stagedir: all deps docs $(SMF_MANIFESTS) check-nginx
 	chmod 755 $(RELSTAGEDIR)/root/opt/smartdc/mako/boot/setup.sh
 	rm $(RELSTAGEDIR)/root/opt/smartdc/mako/nginx/conf/*.default
 	(cd $(RELSTAGEDIR) && $(TAR) -jcf $(ROOT)/$(RELEASE_TARBALL) root site)
-
-.PHONY: release
-release: release_stagedir
-	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
 publish: release
