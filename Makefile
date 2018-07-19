@@ -74,8 +74,8 @@ include ./tools/mk/Makefile.nginx.defs
 # MG Variables
 #
 ROOT            := $(shell pwd)
-RELEASE_TARBALL := mako-pkg-$(STAMP).tar.bz2
-RELSTAGEDIR          := /tmp/$(STAMP)
+RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tar.bz2
+RELSTAGEDIR		:= /tmp/$(NAME)-$(STAMP)
 
 
 AGENTS = amon config minnow registrar
@@ -92,7 +92,7 @@ NPM_ENV          = MAKE_OVERRIDES="CTFCONVERT=/bin/true CTFMERGE=/bin/true"
 # Repo-specific targets
 #
 .PHONY: all
-all: $(NODE_EXEC) $(NGINX_EXEC) $(TAPE) $(REPO_DEPS) scripts agents
+all: $(NODE_EXEC) $(NGINX_EXEC) $(TAPE) $(REPO_DEPS) scripts
 	$(NPM) install
 $(TAPE): | $(NPM_EXEC)
 	$(NPM) install
@@ -133,7 +133,7 @@ clean::
 	-(cd deps/nginx && $(MAKE) clean)
 
 .PHONY: release
-release: all deps docs $(SMF_MANIFESTS) check-nginx
+release: all deps docs $(SMF_MANIFESTS) agents check-nginx
 	@echo "Building $(RELEASE_TARBALL)"
 	@mkdir -p $(RELSTAGEDIR)/root/opt/smartdc/mako
 	@mkdir -p $(RELSTAGEDIR)/root/opt/smartdc/boot
@@ -161,8 +161,8 @@ publish: release
 		@echo "error: 'BITS_DIR' must be set for 'publish' target"; \
 		exit 1; \
 	fi
-	mkdir -p $(BITS_DIR)/mako
-	cp $(ROOT)/$(RELEASE_TARBALL) $(BITS_DIR)/mako/$(RELEASE_TARBALL)
+	mkdir -p $(BITS_DIR)/$(NAME)
+	cp $(ROOT)/$(RELEASE_TARBALL) $(BITS_DIR)/$(NAME)/$(RELEASE_TARBALL)
 
 include ./deps/eng/tools/mk/Makefile.deps
 ifeq ($(shell uname -s),SunOS)
