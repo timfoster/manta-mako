@@ -5,7 +5,7 @@
 #
 
 #
-# Copyright (c) 2017, Joyent, Inc.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 #
@@ -55,8 +55,11 @@ NODE_PREBUILT_IMAGE	= 18b094b0-eb01-11e5-80c1-175dac7ddf02
 #
 BASE_IMAGE_UUID		= 04a48d7d-6bb5-4e83-8c3b-e60a99e0f48f
 BUILDIMAGE_NAME		= manta-storage
-BUILDIMAGE_PKGS		= pcre-8.38
+BUILDIMAGE_PKGSRC	= pcre-8.38
 BUILDIMAGE_MF		= '{"name": "$(BUILDIMAGE_NAME)", "version": "$(STAMP)"}'
+BUILDIMAGE_PKG		= $(TOP)/$(RELEASE_TARBALL)
+BUILDIMAGE_STAGEDIR = /tmp/buildimage-$(NAME)-$(STAMP)
+AGENTS = amon config minnow registrar
 
 REQUIRE_ENG := $(shell git submodule update --init deps/eng)
 include ./deps/eng/tools/mk/Makefile.defs
@@ -77,10 +80,6 @@ ROOT            := $(shell pwd)
 RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tar.bz2
 RELSTAGEDIR		:= /tmp/$(NAME)-$(STAMP)
 
-
-AGENTS = amon config minnow registrar
-AGENT_DEPS = $(AGENTS:=-prebuilt)
-
 #
 # v8plus uses the CTF tools as part of its build, but they can safely be
 # overridden here so that this works in dev zones without them.
@@ -97,7 +96,7 @@ all: $(NODE_EXEC) $(NGINX_EXEC) $(TAPE) $(REPO_DEPS) scripts
 $(TAPE): | $(NPM_EXEC)
 	$(NPM) install
 
-CLEAN_FILES += $(TAPE) ./node_modules/ build
+CLEAN_FILES += $(TAPE) ./node_modules/ build $(NAME)-pkg-*.tar.bz2
 
 check-bash: $(NODE_EXEC)
 
@@ -118,9 +117,6 @@ check-nginx: $(NGINX_EXEC)
 	$(NGXSYMCHECK) $(NGINX_EXEC)
 prepush: check-nginx
 
-.PHONY: agents
-agents: $(AGENT_DEPS)
-
 #
 # The eng.git makefiles define the clean target using a :: rule. This
 # means that we're allowed to have multiple bodies that define the rule
@@ -133,7 +129,7 @@ clean::
 	-(cd deps/nginx && $(MAKE) clean)
 
 .PHONY: release
-release: all deps docs $(SMF_MANIFESTS) agents check-nginx
+release: all deps docs $(SMF_MANIFESTS) check-nginx
 	@echo "Building $(RELEASE_TARBALL)"
 	@mkdir -p $(RELSTAGEDIR)/root/opt/smartdc/mako
 	@mkdir -p $(RELSTAGEDIR)/root/opt/smartdc/boot
@@ -154,6 +150,7 @@ release: all deps docs $(SMF_MANIFESTS) agents check-nginx
 	chmod 755 $(RELSTAGEDIR)/root/opt/smartdc/mako/boot/setup.sh
 	rm $(RELSTAGEDIR)/root/opt/smartdc/mako/nginx/conf/*.default
 	(cd $(RELSTAGEDIR) && $(TAR) -jcf $(ROOT)/$(RELEASE_TARBALL) root site)
+	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
 publish: release
