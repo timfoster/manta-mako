@@ -58,7 +58,6 @@ BUILDIMAGE_NAME		= manta-storage
 BUILDIMAGE_DESC		= Manta Storage
 BUILDIMAGE_PKGSRC	= pcre-8.38
 BUILDIMAGE_PKG		= $(TOP)/$(RELEASE_TARBALL)
-BUILDIMAGE_STAGEDIR = /tmp/buildimage-$(NAME)-$(STAMP)
 AGENTS = amon config minnow registrar
 
 REQUIRE_ENG := $(shell git submodule update --init deps/eng)
