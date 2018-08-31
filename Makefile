@@ -95,7 +95,7 @@ all: $(NODE_EXEC) $(NGINX_EXEC) $(TAPE) $(REPO_DEPS) scripts
 $(TAPE): | $(NPM_EXEC)
 	$(NPM) install
 
-CLEAN_FILES += $(TAPE) ./node_modules/ build $(NAME)-pkg-*.tar.bz2
+CLEAN_FILES += $(TAPE) ./node_modules/ build
 
 check-bash: $(NODE_EXEC)
 
