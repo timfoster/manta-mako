@@ -16,3 +16,5 @@
 [submodule "eng"]
 	path = deps/eng
 	url = https://github.com/timfoster/eng.git
+[submodule "deps/eng"]
+	url = https://github.com/timfoster/eng.git
