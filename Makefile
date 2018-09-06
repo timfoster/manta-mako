@@ -76,7 +76,7 @@ include ./tools/mk/Makefile.nginx.defs
 # MG Variables
 #
 ROOT            := $(shell pwd)
-RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tar.bz2
+RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tar.gz
 RELSTAGEDIR		:= /tmp/$(NAME)-$(STAMP)
 
 #
@@ -148,7 +148,7 @@ release: all deps docs $(SMF_MANIFESTS) check-nginx
 	    $(RELSTAGEDIR)/root/opt/smartdc/boot/setup.sh
 	chmod 755 $(RELSTAGEDIR)/root/opt/smartdc/mako/boot/setup.sh
 	rm $(RELSTAGEDIR)/root/opt/smartdc/mako/nginx/conf/*.default
-	(cd $(RELSTAGEDIR) && $(TAR) -jcf $(ROOT)/$(RELEASE_TARBALL) root site)
+	(cd $(RELSTAGEDIR) && $(TAR) -I pigz -cf $(ROOT)/$(RELEASE_TARBALL) root site)
 	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
