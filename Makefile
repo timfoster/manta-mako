@@ -153,12 +153,12 @@ release: all deps docs $(SMF_MANIFESTS) check-nginx
 
 .PHONY: publish
 publish: release
-	@if [[ -z "$(BITS_DIR)" ]]; then \
-		@echo "error: 'BITS_DIR' must be set for 'publish' target"; \
+	@if [[ -z "$(ENGBLD_BITS_DIR)" ]]; then \
+		@echo "error: 'ENGBLD_BITS_DIR' must be set for 'publish' target"; \
 		exit 1; \
 	fi
-	mkdir -p $(BITS_DIR)/$(NAME)
-	cp $(ROOT)/$(RELEASE_TARBALL) $(BITS_DIR)/$(NAME)/$(RELEASE_TARBALL)
+	mkdir -p $(ENGBLD_BITS_DIR)/$(NAME)
+	cp $(ROOT)/$(RELEASE_TARBALL) $(ENGBLD_BITS_DIR)/$(NAME)/$(RELEASE_TARBALL)
 
 include ./deps/eng/tools/mk/Makefile.deps
 ifeq ($(shell uname -s),SunOS)
