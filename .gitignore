@@ -8,5 +8,5 @@ docs/*.html
 cscope.in.out
 cscope.po.out
 cscope.out
-mako-pkg-*tar.bz2
+mako-pkg-*tar.gz
 smf/manifests/bapi.xml
