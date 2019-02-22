@@ -76,7 +76,7 @@ include ./tools/mk/Makefile.nginx.defs
 # MG Variables
 #
 ROOT            := $(shell pwd)
-RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tar.gz
+RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tar.bz2
 RELSTAGEDIR		:= /tmp/$(NAME)-$(STAMP)
 
 #
@@ -148,15 +148,11 @@ release: all deps docs $(SMF_MANIFESTS) check-nginx
 	    $(RELSTAGEDIR)/root/opt/smartdc/boot/setup.sh
 	chmod 755 $(RELSTAGEDIR)/root/opt/smartdc/mako/boot/setup.sh
 	rm $(RELSTAGEDIR)/root/opt/smartdc/mako/nginx/conf/*.default
-	(cd $(RELSTAGEDIR) && $(TAR) -I pigz -cf $(ROOT)/$(RELEASE_TARBALL) root site)
+	(cd $(RELSTAGEDIR) && $(TAR) -jcf $(ROOT)/$(RELEASE_TARBALL) root site)
 	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
 publish: release
-	@if [[ -z "$(ENGBLD_BITS_DIR)" ]]; then \
-		@echo "error: 'ENGBLD_BITS_DIR' must be set for 'publish' target"; \
-		exit 1; \
-	fi
 	mkdir -p $(ENGBLD_BITS_DIR)/$(NAME)
 	cp $(ROOT)/$(RELEASE_TARBALL) $(ENGBLD_BITS_DIR)/$(NAME)/$(RELEASE_TARBALL)
 
